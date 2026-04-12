@@ -9,6 +9,7 @@ namespace JobMSWebApi.Data
         {
         }
         public DbSet<Application> Applications { get; set; }
+        public DbSet<Job> Jobs { get; set; }
 
     }
 }
