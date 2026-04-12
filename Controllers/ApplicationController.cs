@@ -15,7 +15,7 @@ namespace JobMSWebApi.Controllers
             _repo = repo;
         }
 
-        [HttpGet]
+        [HttpGet ]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var data = await _repo.GetAllApplicationsAsync(cancellationToken);
