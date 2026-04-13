@@ -1,5 +1,6 @@
 ﻿using JobMSWebApi.Data;
 using JobMSWebApi.model;
+using JobMSWebApi.ViewModel.Application;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobMSWebApi.Repository
@@ -13,52 +14,109 @@ namespace JobMSWebApi.Repository
             _context = context;
         }
 
-        public async Task<Application> AddApplicationAsync(Application application, CancellationToken cancellationToken)
+        // CREATE
+        public async Task<long> CreateAsync(ApplicationCreateDto dto, CancellationToken cancellationToken)
         {
-            await _context.Applications.AddAsync(application, cancellationToken);
+            var entity = new Application
+            {
+                ApplicationId = dto.ApplicationId,
+                Name = dto.Name,
+                PresentSalary = dto.PresentSalary,
+                ExpectionSalary = dto.ExpectionSalary,
+                Degree = dto.Degree,
+                University = dto.University,
+                CGPA = dto.CGPA,
+                CompletionYear = dto.CompletionYear,
+                ResumePath = dto.ResumePath,
+                JobId = dto.JobId
+            };
+
+            await _context.Applications.AddAsync(entity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return application;
+
+            return entity.Id;
         }
 
-        public async Task<Application> DeleteApplicationAsync(long id, CancellationToken cancellationToken)
+        // DELETE
+        public async Task<bool> DeleteAsync(long id, CancellationToken cancellationToken)
         {
-            var data = await _context.Applications.FindAsync(new object[] { id }, cancellationToken);
+            var data = await _context.Applications.FindAsync(id, cancellationToken);
 
-            if (data == null) return null;
+            if (data == null) return false;
 
             _context.Applications.Remove(data);
             await _context.SaveChangesAsync(cancellationToken);
-            return data;
+
+            return true;
         }
 
-        public async Task<IEnumerable<Application>> GetAllApplicationsAsync(CancellationToken cancellationToken)
+        // GET ALL
+        public async Task<IEnumerable<ApplicationValueDto>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.Applications.ToListAsync(cancellationToken);
+            return await _context.Applications
+                .AsNoTracking()
+                .Select(x => new ApplicationValueDto
+                {
+                    Id = x.Id,
+                    ApplicationId = x.ApplicationId,
+                    Name = x.Name,
+                    PresentSalary = x.PresentSalary,
+                    ExpectionSalary = x.ExpectionSalary,
+                    Degree = x.Degree,
+                    University = x.University,
+                    CGPA = x.CGPA,
+                    CompletionYear = x.CompletionYear,
+                    ResumePath = x.ResumePath,
+                    JobId = x.JobId
+                })
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<Application?> GetApplicationByIdAsync(long id, CancellationToken cancellationToken)
+        // GET BY ID
+        public async Task<ApplicationValueDto?> GetByIdAsync(long id, CancellationToken cancellationToken)
         {
-            return await _context.Applications.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return await _context.Applications
+                .AsNoTracking()
+                .Where(x => x.Id == id)
+                .Select(x => new ApplicationValueDto
+                {
+                    Id = x.Id,
+                    ApplicationId = x.ApplicationId,
+                    Name = x.Name,
+                    PresentSalary = x.PresentSalary,
+                    ExpectionSalary = x.ExpectionSalary,
+                    Degree = x.Degree,
+                    University = x.University,
+                    CGPA = x.CGPA,
+                    CompletionYear = x.CompletionYear,
+                    ResumePath = x.ResumePath,
+                    JobId = x.JobId
+                })
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<Application?> UpdateApplicationAsync(Application application, CancellationToken cancellationToken)
+        // UPDATE
+        public async Task<bool> UpdateAsync(ApplicationUpdateDto dto, CancellationToken cancellationToken)
         {
-            var data = await _context.Applications.FirstOrDefaultAsync(x => x.Id == application.Id, cancellationToken);
+            var data = await _context.Applications
+                .FirstOrDefaultAsync(x => x.Id == dto.Id, cancellationToken);
 
-            if (data == null) return null;
+            if (data == null) return false;
 
-            data.ApplicationId = application.ApplicationId;
-            data.Name = application.Name;
-            data.PresentSalary = application.PresentSalary;
-            data.ExpectionSalary = application.ExpectionSalary;
-            data.Degree = application.Degree;
-            data.University = application.University;
-            data.CGPA = application.CGPA;
-            data.CompletionYear = application.CompletionYear;
-            data.ResumePath = application.ResumePath;
+            data.ApplicationId = dto.ApplicationId;
+            data.Name = dto.Name;
+            data.PresentSalary = dto.PresentSalary;
+            data.ExpectionSalary = dto.ExpectionSalary;
+            data.Degree = dto.Degree;
+            data.University = dto.University;
+            data.CGPA = dto.CGPA;
+            data.CompletionYear = dto.CompletionYear;
+            data.ResumePath = dto.ResumePath;
+            data.JobId = dto.JobId;
 
             await _context.SaveChangesAsync(cancellationToken);
-            return data;
+
+            return true;
         }
     }
 }

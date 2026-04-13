@@ -1,5 +1,5 @@
-﻿using JobMSWebApi.model;
-using JobMSWebApi.Repository;
+﻿using JobMSWebApi.Repository;
+using JobMSWebApi.ViewModel.Application;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobMSWebApi.Controllers;
@@ -15,17 +15,19 @@ public class ApplicationController : ControllerBase
         _repo = repo;
     }
 
-    [HttpGet ]
+    // GET ALL
+    [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var data = await _repo.GetAllApplicationsAsync(cancellationToken);
+        var data = await _repo.GetAllAsync(cancellationToken);
         return Ok(data);
     }
 
+    // GET BY ID
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(long id, CancellationToken cancellationToken)
     {
-        var data = await _repo.GetApplicationByIdAsync(id, cancellationToken);
+        var data = await _repo.GetByIdAsync(id, cancellationToken);
 
         if (data == null)
             return NotFound();
@@ -33,35 +35,38 @@ public class ApplicationController : ControllerBase
         return Ok(data);
     }
 
+    // CREATE
     [HttpPost]
-    public async Task<IActionResult> Create(Application application, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(ApplicationCreateDto dto, CancellationToken cancellationToken)
     {
-        var data = await _repo.AddApplicationAsync(application, cancellationToken);
-        return Ok(data);
+        var id = await _repo.CreateAsync(dto, cancellationToken);
+        return Ok(new { Id = id, Message = "Application Created Successfully" });
     }
 
+    // UPDATE
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(long id, Application application, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update(long id, ApplicationUpdateDto dto, CancellationToken cancellationToken)
     {
-        if (id != application.Id)
-            return BadRequest();
+        if (id != dto.Id)
+            return BadRequest("ID mismatch");
 
-        var data = await _repo.UpdateApplicationAsync(application, cancellationToken);
+        var result = await _repo.UpdateAsync(dto, cancellationToken);
 
-        if (data == null)
+        if (!result)
             return NotFound();
 
-        return Ok(data);
+        return Ok(new { Message = "Updated Successfully" });
     }
 
+    // DELETE
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
     {
-        var data = await _repo.DeleteApplicationAsync(id, cancellationToken);
+        var result = await _repo.DeleteAsync(id, cancellationToken);
 
-        if (data == null)
+        if (!result)
             return NotFound();
 
-        return Ok(data);
+        return Ok(new { Message = "Deleted Successfully" });
     }
 }
