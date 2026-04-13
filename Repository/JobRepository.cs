@@ -1,5 +1,6 @@
 ﻿using JobMSWebApi.Data;
 using JobMSWebApi.model;
+using JobMSWebApi.ViewModel.Job;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobMSWebApi.Repository;
@@ -7,65 +8,97 @@ namespace JobMSWebApi.Repository;
 public class JobRepository : IJobRepository
 {
     private readonly ApplicationDbContext _context;
+
     public JobRepository(ApplicationDbContext context)
     {
         _context = context;
     }
-    public async Task<Job> AddJobAsync(Job job, CancellationToken cancellationToken)
-    {
-      await _context.Jobs.AddAsync(job, cancellationToken);
-      await _context.SaveChangesAsync(cancellationToken);
-      return job;
-    }
 
-    public async Task<Job> DeleteJobAsync(long id, CancellationToken cancellationToken)
+    // CREATE
+    public async Task<JobValueDto> AddJobAsync(JobCreateDto dto, CancellationToken cancellationToken)
     {
-       var data = await _context.Jobs.FindAsync(id, cancellationToken);
-
-        if(data != null)
+        var job = new Job
         {
-            _context.Jobs.Remove(data);
-            await _context.SaveChangesAsync(cancellationToken);
-            return data;
-        }
-        return null;
+            JobID = dto.JobID,
+            JobTitle = dto.JobTitle,
+            Description = dto.Description,
+            SalaryRange = dto.SalaryRange,
+            Deadline = dto.Deadline,
+            Status = dto.Status
+        };
+
+        await _context.Jobs.AddAsync(job, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return MapToDto(job);
     }
 
-    public async Task<IEnumerable<Job>> GetAllJobsAsync(CancellationToken cancellationToken)
+    // GET ALL
+    public async Task<IEnumerable<JobValueDto>> GetAllJobsAsync(CancellationToken cancellationToken)
     {
         var data = await _context.Jobs.ToListAsync(cancellationToken);
-        if(data != null)
-        {
-            return data;
-        }
-        return null;
 
+        return data.Select(x => MapToDto(x)).ToList();
     }
 
-    public async Task<Job> GetJobByIdAsync(long id, CancellationToken cancellationToken)
+    // GET BY ID
+    public async Task<JobValueDto?> GetJobByIdAsync(long id, CancellationToken cancellationToken)
     {
-       var data = await _context.Jobs.FindAsync(id, cancellationToken);
-        if(data != null)
-        {
-            return data;
-        }
-        return null;
+        var data = await _context.Jobs
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (data == null) return null;
+
+        return MapToDto(data);
     }
 
-    public async Task<Job> UpdateJobAsync(Job job, CancellationToken cancellationToken)
+    // UPDATE
+    public async Task<JobValueDto?> UpdateJobAsync(JobUpdateDto dto, CancellationToken cancellationToken)
     {
-       var data = await  _context.Jobs.FindAsync(job.Id, cancellationToken);
-        if(data != null)
+        var data = await _context.Jobs
+            .FirstOrDefaultAsync(x => x.Id == dto.Id, cancellationToken);
+
+        if (data == null) return null;
+
+        data.JobID = dto.JobID;
+        data.JobTitle = dto.JobTitle;
+        data.Description = dto.Description;
+        data.SalaryRange = dto.SalaryRange;
+        data.Deadline = dto.Deadline;
+        data.Status = dto.Status;
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return MapToDto(data);
+    }
+
+    // DELETE
+    public async Task<bool> DeleteJobAsync(long id, CancellationToken cancellationToken)
+    {
+        var data = await _context.Jobs
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (data == null) return false;
+
+        _context.Jobs.Remove(data);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return true;
+    }
+
+    // 🔁 Mapping Method (IMPORTANT)
+    private static JobValueDto MapToDto(Job job)
+    {
+        return new JobValueDto
         {
-            data.JobID = job.JobID;
-            data.JobTitle = job.JobTitle;
-            data.Description = job.Description;
-            data.SalaryRange = job.SalaryRange;
-            data.Deadline = job.Deadline;
-            data.Status = job.Status;
-            await _context.SaveChangesAsync(cancellationToken);
-            return data;
-        }
-        return null;
+            Id = job.Id,
+            JobID = job.JobID,
+            JobTitle = job.JobTitle,
+            Description = job.Description,
+            SalaryRange = job.SalaryRange,
+            Deadline = job.Deadline,
+            Status = job.Status,
+            CreatedAt = job.CreatedAt
+        };
     }
 }

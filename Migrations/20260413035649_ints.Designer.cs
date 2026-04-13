@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobMSWebApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260412162754_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260413035649_ints")]
+    partial class ints
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,13 +1,21 @@
-﻿using JobMSWebApi.model;
+﻿using JobMSWebApi.ViewModel.Job;
 
 namespace JobMSWebApi.Repository;
 
 public interface IJobRepository
 {
-         // CRUD operations for Job entity
-        Task<IEnumerable<Job>> GetAllJobsAsync(CancellationToken cancellationToken);
-        Task<Job> GetJobByIdAsync(long id, CancellationToken cancellationToken);
-        Task<Job> AddJobAsync(Job job, CancellationToken cancellationToken);
-        Task<Job> UpdateJobAsync(Job job, CancellationToken cancellationToken);
-        Task<Job> DeleteJobAsync(long id, CancellationToken cancellationToken);
+    // GET ALL
+    Task<IEnumerable<JobValueDto>> GetAllJobsAsync(CancellationToken cancellationToken);
+
+    // GET BY ID
+    Task<JobValueDto?> GetJobByIdAsync(long id, CancellationToken cancellationToken);
+
+    // CREATE
+    Task<JobValueDto> AddJobAsync(JobCreateDto dto, CancellationToken cancellationToken);
+
+    // UPDATE
+    Task<JobValueDto?> UpdateJobAsync(JobUpdateDto dto, CancellationToken cancellationToken);
+
+    // DELETE
+    Task<bool> DeleteJobAsync(long id, CancellationToken cancellationToken);
 }
