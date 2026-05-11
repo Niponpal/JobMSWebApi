@@ -1,9 +1,9 @@
-﻿using JobMS.Auth_IdentityModel;
+﻿using  JobMSWebApi.Auth_IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace JobMS.Data.Configuration;
+namespace JobMSWebApi.Data.Configuration;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

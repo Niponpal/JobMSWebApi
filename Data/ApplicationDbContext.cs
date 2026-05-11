@@ -1,38 +1,72 @@
-﻿using JobMSWebApi.model;
+﻿using JobMSWebApi.Auth_IdentityModel;
+using JobMSWebApi.model;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Reflection;
 
-namespace JobMSWebApi.Data
+public class ApplicationDbContext : IdentityDbContext<
+    User,
+    Role,
+    long,
+    UserClaim,
+    UserRole,
+    UserLogin,
+    RoleClaim,
+    UserToken>
 {
-    public class ApplicationDbContext:DbContext
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-        }
-        public DbSet<Application> Applications { get; set; }
-        public DbSet<Job> Jobs { get; set; }
+    }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder); // add this
+    public DbSet<Job> Jobs { get; set; }
+    public DbSet<Application> Applications { get; set; }
 
-            modelBuilder.Entity<Application>()
-                .HasOne(a => a.Job)
-                .WithMany(j => j.Applications)
-                .HasForeignKey(a => a.JobId)
-                .OnDelete(DeleteBehavior.Cascade);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Application>()
-                .Property(a => a.CGPA)
-                .HasPrecision(3, 2);
+        // ========================
+        // USER RELATION
+        // ========================
+        modelBuilder.Entity<Application>()
+            .HasOne(a => a.User)
+            .WithMany()   // (optional: later use User.Applications)
+            .HasForeignKey(a => a.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Application>()
-                .Property(a => a.PresentSalary)
-                .HasPrecision(18, 2);
+        // ========================
+        // JOB RELATION
+        // ========================
+        modelBuilder.Entity<Application>()
+            .HasOne(a => a.Job)
+            .WithMany(j => j.Applications)
+            .HasForeignKey(a => a.JobId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Application>()
-                .Property(a => a.ExpectionSalary)
-                .HasPrecision(18, 2);
-        }
+        // ========================
+        // DECIMAL FIX (SAFE)
+        // ========================
+        modelBuilder.Entity<Application>()
+            .Property(x => x.CGPA)
+            .HasPrecision(3, 2);
 
+        modelBuilder.Entity<Application>()
+            .Property(x => x.PresentSalary)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<Application>()
+            .Property(x => x.ExpectionSalary)
+            .HasPrecision(18, 2);
+
+        // REMOVE unnecessary configs if not needed
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.ConfigureWarnings(warnings =>
+            warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
     }
 }
