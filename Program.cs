@@ -1,5 +1,6 @@
 ﻿using JobMSWebApi;
 using JobMSWebApi.Auth_IdentityModel;
+using JobMSWebApi.FilesUpload;
 using JobMSWebApi.Helper;
 using JobMSWebApi.Repository;
 using JobMSWebApi.Service;
@@ -27,6 +28,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // =========================
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
+
+builder.Services.AddScoped<IFileService, FileService>();
 
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
