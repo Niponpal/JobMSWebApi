@@ -1,8 +1,8 @@
-﻿using JobMS.Auth_IdentityModel;
+﻿using JobMSWebApi.Auth_IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
     
-namespace JobMS.Data.Configuration;
+namespace JobMSWebApi.Data.Configuration;
 
 public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {

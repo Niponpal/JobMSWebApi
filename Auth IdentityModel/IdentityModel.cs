@@ -1,9 +1,8 @@
 ﻿using JobMSWebApi.model;
-using JobMSWebApi.Models;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace JobMS.Auth_IdentityModel;
+namespace JobMSWebApi.Auth_IdentityModel;
 
 // ------------------ User Table ------------------
 [Table("Users")]
