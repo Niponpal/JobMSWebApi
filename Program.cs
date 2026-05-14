@@ -24,18 +24,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // =========================
-// DI Services
-// =========================
-builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
-builder.Services.AddScoped<IJobRepository, JobRepository>();
-
-builder.Services.AddScoped<IFileService, FileService>();
-
-builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddTransient<ISignInHelper, SignInHelper>();
-
-// =========================
 // Identity
 // =========================
 builder.Services.AddIdentity<User, Role>(options =>
@@ -49,11 +37,25 @@ builder.Services.AddIdentity<User, Role>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+// =========================
+// Dependency Injection
+// =========================
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+
+builder.Services.AddScoped<IFileService, FileService>();
+
+builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddTransient<ISignInHelper, SignInHelper>();
+
 var app = builder.Build();
 
 // =========================
-// Middleware pipeline
+// Middleware Pipeline
 // =========================
+
+// Swagger (Development only)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -62,9 +64,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// ❗ IMPORTANT FIX (MISSING IN YOUR CODE)
-app.UseAuthentication();
+// ✅ Static Files (IMPORTANT for image upload)
+app.UseStaticFiles();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
