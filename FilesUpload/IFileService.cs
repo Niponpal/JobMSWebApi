@@ -5,6 +5,7 @@ public interface IFileService
     Task<string> Upload(IFormFile file, string folderName);
     void DeleteFile(string fileNameWithExtension, string folderName);
 }
+
 public class FileService : IFileService
 {
     private readonly IWebHostEnvironment env;
@@ -14,34 +15,18 @@ public class FileService : IFileService
         this.env = env;
     }
 
-    //public void DeleteFile(string fileNameWithExtension, string folderName)
-    //{
-    //    if (string.IsNullOrEmpty(fileNameWithExtension))
-    //    {
-    //        throw new ArgumentNullException(nameof(fileNameWithExtension));
-    //    }
-
-    //    var contentPath = env.ContentRootPath;
-    //    var path = Path.Combine(contentPath, "wwwroot", folderName.Replace("/", Path.DirectorySeparatorChar.ToString()).Replace("\\", Path.DirectorySeparatorChar.ToString()), fileNameWithExtension);
-
-    //    Console.WriteLine($"Constructed path: {path}");
-
-    //    if (!File.Exists(path))
-    //    {
-    //        throw new FileNotFoundException($"File not found at path: {path}");
-    //    }
-
-    //    File.Delete(path);
-    //}
-
+    // =========================
+    // DELETE FILE
+    // =========================
     public void DeleteFile(string fileNameWithExtension, string folderName)
     {
         if (string.IsNullOrEmpty(fileNameWithExtension))
             throw new ArgumentNullException(nameof(fileNameWithExtension));
 
-        var path = Path.Combine(env.WebRootPath, folderName, fileNameWithExtension);
+        var webRoot = env.WebRootPath
+            ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
 
-        Console.WriteLine($"Constructed path: {path}");
+        var path = Path.Combine(webRoot, folderName, fileNameWithExtension);
 
         if (File.Exists(path))
         {
@@ -49,34 +34,18 @@ public class FileService : IFileService
         }
     }
 
-    //public async Task<string> Upload(IFormFile file, string folderName)
-    //{
-    //    if (file is null)
-    //    {
-    //        return string.Empty;
-    //    }
-    //    else
-    //    {
-    //        var uploadPath = Path.Combine(env.WebRootPath, folderName);
-    //        if (!Directory.Exists(uploadPath))
-    //            Directory.CreateDirectory(uploadPath);
-    //        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-    //        var filePath = Path.Combine(uploadPath, fileName);
-    //        using (var stream = new FileStream(filePath, FileMode.Create))
-    //        {
-    //            await file.CopyToAsync(stream);
-    //        }
-
-
-    //        return $"{folderName}/{fileName}";
-    //    }
-    //}
+    // =========================
+    // UPLOAD FILE (FIXED)
+    // =========================
     public async Task<string> Upload(IFormFile file, string folderName)
     {
         if (file == null || file.Length == 0)
-            return null; // 🔥 better than empty string
+            return null;
 
-        var uploadPath = Path.Combine(env.WebRootPath, folderName);
+        var webRoot = env.WebRootPath
+            ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+
+        var uploadPath = Path.Combine(webRoot, folderName);
 
         if (!Directory.Exists(uploadPath))
             Directory.CreateDirectory(uploadPath);
