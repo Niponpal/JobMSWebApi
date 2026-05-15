@@ -17,6 +17,7 @@ public class AuthService : IAuthService
 
     public AuthService(UserManager<User> userManager)
     {
+
         _userManager = userManager;
     }
 
@@ -31,6 +32,7 @@ public class AuthService : IAuthService
                 Errors = new() { $"Email '{request.Email}' is already registered." }
             };
         }
+
 
         var user = new User
         {
