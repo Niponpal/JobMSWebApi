@@ -37,8 +37,8 @@ public class JobRepository : IJobRepository
     public async Task<IEnumerable<JobValueDto>> GetAllJobsAsync(CancellationToken cancellationToken)
     {
         var data = await _context.Jobs.ToListAsync(cancellationToken);
-
         return data.Select(x => MapToDto(x)).ToList();
+
     }
 
     // GET BY ID
