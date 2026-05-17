@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobMSWebApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260511063236_Ints")]
-    partial class Ints
+    [Migration("20260517070016_ints")]
+    partial class ints
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -225,8 +225,8 @@ namespace JobMSWebApi.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "57297367-1f3c-4bca-af19-5f99451c970b",
-                            CreatedAt = new DateTime(2026, 5, 11, 12, 32, 36, 5, DateTimeKind.Local).AddTicks(6226),
+                            ConcurrencyStamp = "81bcdb2d-9b03-4301-a303-05acc88ed973",
+                            CreatedAt = new DateTime(2026, 5, 17, 13, 0, 15, 926, DateTimeKind.Local).AddTicks(660),
                             CreatedBy = 0L,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "admin@localhost.com",
@@ -234,10 +234,10 @@ namespace JobMSWebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMJ/ncFL2GStXMEscMAHmr4xJb7QorE8+c2rBZIUSjdPeswBFRH6ap0RW6+s3P8ztw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELkOqA7U+GzkxRrRJS1JfWzUVzTtCxSDDBVPJh3ppzv0qazh6Fd+ZmIguueOtPmCPA==",
                             PhoneNumberConfirmed = false,
                             RegisterDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "8d9e44e7-e5b2-4974-9421-13127963aa6b",
+                            SecurityStamp = "128486a0-dbc6-4722-a3d2-0c2a0cfd1316",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -245,8 +245,8 @@ namespace JobMSWebApi.Migrations
                         {
                             Id = 2L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9f18bd23-06a4-4f9e-a23f-d9b992d4c759",
-                            CreatedAt = new DateTime(2026, 5, 11, 12, 32, 36, 57, DateTimeKind.Local).AddTicks(2187),
+                            ConcurrencyStamp = "1c7659a3-9780-4170-b858-6990ef44201a",
+                            CreatedAt = new DateTime(2026, 5, 17, 13, 0, 15, 976, DateTimeKind.Local).AddTicks(4421),
                             CreatedBy = 0L,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "employer@localhost.com",
@@ -254,10 +254,10 @@ namespace JobMSWebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "EMPLOYER@LOCALHOST.COM",
                             NormalizedUserName = "EMPLOYER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIBLSQGh9FTtFo+d9Zm1S0u5fCMIDdGT8RiR1bW/eWtwijdfaFciVYqq/lFTIWrFZg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENvVwHU2npLScRmL4RWviObqAru7Cj2xbIm7XRisvS1mk1BhdPQAFuwt3PBIZhBWBg==",
                             PhoneNumberConfirmed = false,
                             RegisterDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "99996b40-22c6-42cc-96b4-21ab3143a272",
+                            SecurityStamp = "a5af73f8-1d7f-44b0-9115-4f77c636a3f4",
                             TwoFactorEnabled = false,
                             UserName = "employer@localhost.com"
                         },
@@ -265,8 +265,8 @@ namespace JobMSWebApi.Migrations
                         {
                             Id = 3L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "25891cd4-7629-46c7-9734-a0e773cbd230",
-                            CreatedAt = new DateTime(2026, 5, 11, 12, 32, 36, 104, DateTimeKind.Local).AddTicks(6812),
+                            ConcurrencyStamp = "15f15aa7-d70c-4692-b212-a34eb2ceb5f5",
+                            CreatedAt = new DateTime(2026, 5, 17, 13, 0, 16, 23, DateTimeKind.Local).AddTicks(5766),
                             CreatedBy = 0L,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "candidate@localhost.com",
@@ -274,10 +274,10 @@ namespace JobMSWebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "CANDIDATE@LOCALHOST.COM",
                             NormalizedUserName = "CANDIDATE@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIvVuM7oH09UjfmUi/LHnTQoEBna9Osl8ztOTv4WfraCyPVkD/YBRYbqKf2rZpNLMQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIgsJrdPBgayb8+JuALzyZAQtM97SqwOMPwTxqYYPmv3BaTG7L+PsaDC5nF6JXk6hQ==",
                             PhoneNumberConfirmed = false,
                             RegisterDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "5f10d16e-b6ce-4655-bf31-1bd7dc52dd1c",
+                            SecurityStamp = "3093b48e-b2fc-4ade-b457-5b9709c6a1ed",
                             TwoFactorEnabled = false,
                             UserName = "candidate@localhost.com"
                         });
