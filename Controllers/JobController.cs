@@ -40,11 +40,15 @@ public class JobController : ControllerBase
     // CREATE
     [HttpPost]
     public async Task<IActionResult> Create(
-        [FromBody] JobCreateDto dto,
-        CancellationToken cancellationToken)
+     [FromBody] JobCreateDto dto,
+     CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
+
+        // 🔥 OPTIONAL VALIDATION (VERY IMPORTANT)
+        if (string.IsNullOrEmpty(dto.UserId))
+            return BadRequest(new { message = "UserId is required" });
 
         var data = await _repo.AddJobAsync(dto, cancellationToken);
 
@@ -53,7 +57,6 @@ public class JobController : ControllerBase
             new { id = data.Id },
             data);
     }
-
     // UPDATE
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(

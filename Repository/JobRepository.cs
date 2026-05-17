@@ -1,4 +1,5 @@
-﻿using JobMSWebApi.Data;
+﻿using JobMSWebApi.Auth_IdentityModel;
+using JobMSWebApi.Data;
 using JobMSWebApi.model;
 using JobMSWebApi.ViewModel.Job;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,10 @@ public class JobRepository : IJobRepository
             Description = dto.Description,
             SalaryRange = dto.SalaryRange,
             Deadline = dto.Deadline,
-            Status = dto.Status
+            Status = dto.Status,
+
+            // 🔥 REQUIRED FK
+            UserId = dto.UserId
         };
 
         await _context.Jobs.AddAsync(job, cancellationToken);
@@ -55,6 +59,7 @@ public class JobRepository : IJobRepository
     // UPDATE
     public async Task<JobValueDto?> UpdateJobAsync(JobUpdateDto dto, CancellationToken cancellationToken)
     {
+
         var data = await _context.Jobs
             .FirstOrDefaultAsync(x => x.Id == dto.Id, cancellationToken);
 
@@ -67,10 +72,14 @@ public class JobRepository : IJobRepository
         data.Deadline = dto.Deadline;
         data.Status = dto.Status;
 
+        // 🔥 ADD THIS (VERY IMPORTANT)
+        // data.UserId = dto.UserId;  (optional if update supports it)
+
         await _context.SaveChangesAsync(cancellationToken);
 
         return MapToDto(data);
     }
+    
 
     // DELETE
     public async Task<bool> DeleteJobAsync(long id, CancellationToken cancellationToken)

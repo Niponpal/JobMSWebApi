@@ -22,8 +22,7 @@ namespace JobMSWebApi.ViewModel.Job
 
         public string Status { get; set; } = "Active";
 
-        // ADD THIS
-        [Required(ErrorMessage = "UserId is required.")]
+        
         public string UserId { get; set; } = null!;
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;

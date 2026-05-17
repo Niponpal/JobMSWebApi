@@ -12,10 +12,10 @@ namespace JobMSWebApi.model
         public string JobID { get; set; } = string.Empty;
 
         // =========================
-        // USER RELATION
+        // FIXED USER RELATION
         // =========================
-        public long UserId { get; set; }
-
+      
+        public string UserId { get; set; } = null!;
         public User User { get; set; } = null!;
 
         // =========================
@@ -37,7 +37,6 @@ namespace JobMSWebApi.model
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        // FIXED COLLECTION
         public ICollection<Application> Applications { get; set; }
             = new HashSet<Application>();
     }
